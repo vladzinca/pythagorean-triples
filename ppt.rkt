@@ -107,14 +107,20 @@
 (define (maximum-index n)
   (tail-maximum-index n n))
 
-(print "64 is between ")
-(minimum-index 64)
-(print "and ")
-(maximum-index 64)
+(define (aux-get-transformations n min max)
+  (if (= min 1)
+      '()
+      (cond
+        ((and (>= n min) (<= n (+ min (- (/ (+ (- max min) 1) 3) 1)))) (print "1"))
+        ((and (>= n (+ min (/ (+ (- max min) 1) 3))) (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))) (print "2"))
+        ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2))) (<= n max)) (print "3")))))
 
 (define (get-transformations n)
-  'your-code-here)
+  (aux-get-transformations n (minimum-index n) (maximum-index n)))
 
+(print "64 is in")
+(get-transformations 64)
+(print "third")
 
 ; TODO
 ; Implementați o funcție care primește o listă Ts de
