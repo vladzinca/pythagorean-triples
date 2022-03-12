@@ -78,6 +78,24 @@
 ; (de exemplu pentru determinarea nivelului din arbore
 ; pe care se află n, sau a indexului minim/maxim de pe
 ; nivelul respectiv, etc.)
+(define (3-pow n)
+  (if (= n 0)
+      1
+      (* 3 (3-pow (- n 1)))))
+
+(define (tail-get-ns-level n x)
+  (if (<= n 0)
+      x
+      (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
+
+(define (tail-get-ns-level n x)
+  (if (<= n 0)
+      x
+      (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
+
+(define (get-ns-level n)
+  (tail-get-ns-level n 0))
+
 (define (get-transformations n)
   'your-code-here)
 
