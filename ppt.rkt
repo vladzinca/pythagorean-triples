@@ -108,19 +108,17 @@
   (tail-maximum-index n n))
 
 (define (aux-get-transformations n min max)
-  (if (= min 1)
+  (if (= min max)
       '()
       (cond
-        ((and (>= n min) (<= n (+ min (- (/ (+ (- max min) 1) 3) 1)))) (print "1"))
-        ((and (>= n (+ min (/ (+ (- max min) 1) 3))) (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))) (print "2"))
-        ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2))) (<= n max)) (print "3")))))
+        ((and (>= n min) (<= n (+ min (- (/ (+ (- max min) 1) 3) 1)))) (append (list 1) (aux-get-transformations n min (+ min (- (/ (+ (- max min) 1) 3) 1)))))
+        ((and (>= n (+ min (/ (+ (- max min) 1) 3))) (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))) (append (list 2) (aux-get-transformations n (+ min (/ (+ (- max min) 1) 3)) (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))))
+        ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2))) (<= n max)) (append (list 3) (aux-get-transformations n (+ min (* (/ (+ (- max min) 1) 3) 2)) max))))))
 
 (define (get-transformations n)
   (aux-get-transformations n (minimum-index n) (maximum-index n)))
 
-(print "64 is in")
 (get-transformations 64)
-(print "third")
 
 ; TODO
 ; Implementați o funcție care primește o listă Ts de
