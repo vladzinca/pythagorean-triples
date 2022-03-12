@@ -80,40 +80,47 @@
 ; nivelul respectiv, etc.)
 (define (3-pow n)
   (if (= n 0)
-      1
-      (* 3 (3-pow (- n 1)))))
+    1
+    (* 3 (3-pow (- n 1)))))
 
 (define (tail-get-ns-level n x)
   (if (<= n 0)
-      x
-      (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
+    x
+    (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
 
 (define (get-ns-level n)
   (tail-get-ns-level n 0))
 
 (define (tail-minimum-index n x)
   (if (= (get-ns-level n) (get-ns-level x))
-      (tail-minimum-index (- n 1) x)
-      (+ n 1)))
+    (tail-minimum-index (- n 1) x)
+    (+ n 1)))
 
 (define (minimum-index n)
   (tail-minimum-index n n))
 
 (define (tail-maximum-index n x)
   (if (= (get-ns-level n) (get-ns-level x))
-      (tail-maximum-index (+ n 1) x)
-      (- n 1)))
+    (tail-maximum-index (+ n 1) x)
+    (- n 1)))
 
 (define (maximum-index n)
   (tail-maximum-index n n))
 
 (define (aux-get-transformations n min max)
   (if (= min max)
-      '()
-      (cond
-        ((and (>= n min) (<= n (+ min (- (/ (+ (- max min) 1) 3) 1)))) (append (list 1) (aux-get-transformations n min (+ min (- (/ (+ (- max min) 1) 3) 1)))))
-        ((and (>= n (+ min (/ (+ (- max min) 1) 3))) (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))) (append (list 2) (aux-get-transformations n (+ min (/ (+ (- max min) 1) 3)) (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))))
-        ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2))) (<= n max)) (append (list 3) (aux-get-transformations n (+ min (* (/ (+ (- max min) 1) 3) 2)) max))))))
+    '()
+    (cond
+      ((and (>= n min)
+      (<= n (+ min (- (/ (+ (- max min) 1) 3) 1))))
+        (append (list 1) (aux-get-transformations n min (+ min (- (/ (+ (- max min) 1) 3) 1)))))
+      ((and (>= n (+ min (/ (+ (- max min) 1) 3)))
+      (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1))))
+        (append (list 2) (aux-get-transformations n (+ min (/ (+ (- max min) 1) 3))
+        (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))))
+      ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2)))
+      (<= n max))
+        (append (list 3) (aux-get-transformations n (+ min (* (/ (+ (- max min) 1) 3) 2)) max))))))
 
 (define (get-transformations n)
   (aux-get-transformations n (minimum-index n) (maximum-index n)))
@@ -144,4 +151,4 @@
 ; Implementați o funcție care calculează al n-lea TPP
 ; din arbore, folosind funcțiile anterioare.
 (define (get-nth-ppt-from-matrix-transformations n)
-  'your-code-here)
+  (apply-matrix-transformations (get-transformations n) '(3 4 5)))
