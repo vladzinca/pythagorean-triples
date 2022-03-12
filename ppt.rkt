@@ -2,7 +2,7 @@
 
 (provide (all-defined-out))
 
-;; Un triplet pitagoreic primitiv (TPP) este format din 
+;; Un triplet pitagoreic primitiv (TPP) este format din
 ;; 3 numere naturale nenule a, b, c cu proprietățile:
 ;;    a^2 + b^2 = c^2
 ;;    a, b, c prime între ele
@@ -44,7 +44,9 @@
 ; Ex: (-1,2,2)·(3,4,5) = -3 + 8 + 10 = 15
 ; Utilizați recursivitate pe stivă.
 (define (dot-product X Y)
-  'your-code-here)
+  (if (null? X)
+    0
+    (+ (* (car X) (car Y)) (dot-product (cdr X) (cdr Y)))))
 
 
 ; TODO
@@ -68,16 +70,16 @@
 ; Ex: (get-transformations 8) întoarce '(2 1), adică
 ; al 8-lea TPP din arbore se obține din T1·T2·(3,4,5).
 ; Sunteți încurajați să folosiți funcții ajutătoare
-; (de exemplu pentru determinarea nivelului din arbore 
-; pe care se află n, sau a indexului minim/maxim de pe 
+; (de exemplu pentru determinarea nivelului din arbore
+; pe care se află n, sau a indexului minim/maxim de pe
 ; nivelul respectiv, etc.)
 (define (get-transformations n)
   'your-code-here)
 
 
 ; TODO
-; Implementați o funcție care primește o listă Ts de 
-; tipul celei întoarsă de get-transformations, respectiv 
+; Implementați o funcție care primește o listă Ts de
+; tipul celei întoarsă de get-transformations, respectiv
 ; un triplet de start ppt și întoarce tripletul rezultat
 ; în urma aplicării transformărilor din Ts asupra ppt.
 ; Utilizați recursivitate pe coadă.
