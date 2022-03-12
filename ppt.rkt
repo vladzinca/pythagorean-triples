@@ -118,7 +118,6 @@
 (define (get-transformations n)
   (aux-get-transformations n (minimum-index n) (maximum-index n)))
 
-(get-transformations 64)
 
 ; TODO
 ; Implementați o funcție care primește o listă Ts de
@@ -126,8 +125,19 @@
 ; un triplet de start ppt și întoarce tripletul rezultat
 ; în urma aplicării transformărilor din Ts asupra ppt.
 ; Utilizați recursivitate pe coadă.
+(define (convert-to-matrix n)
+  (cond
+    ((= n 1) T1)
+    ((= n 2) T2)
+    ((= n 3) T3)))
+
+(define (tail-apply-matrix-transformations Ts ppt x)
+  (if (null? Ts)
+    x
+    (tail-apply-matrix-transformations (cdr Ts) ppt (multiply (convert-to-matrix (car Ts)) x))))
+
 (define (apply-matrix-transformations Ts ppt)
-  'your-code-here)
+  (tail-apply-matrix-transformations Ts ppt ppt))
 
 
 ; TODO
