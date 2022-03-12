@@ -88,13 +88,29 @@
       x
       (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
 
-(define (tail-get-ns-level n x)
-  (if (<= n 0)
-      x
-      (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
-
 (define (get-ns-level n)
   (tail-get-ns-level n 0))
+
+(define (tail-minimum-index n x)
+  (if (= (get-ns-level n) (get-ns-level x))
+      (tail-minimum-index (- n 1) x)
+      (+ n 1)))
+
+(define (minimum-index n)
+  (tail-minimum-index n n))
+
+(define (tail-maximum-index n x)
+  (if (= (get-ns-level n) (get-ns-level x))
+      (tail-maximum-index (+ n 1) x)
+      (- n 1)))
+
+(define (maximum-index n)
+  (tail-maximum-index n n))
+
+(print "64 is between ")
+(minimum-index 64)
+(print "and ")
+(maximum-index 64)
 
 (define (get-transformations n)
   'your-code-here)
