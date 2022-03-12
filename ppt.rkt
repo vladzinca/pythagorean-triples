@@ -57,8 +57,13 @@
 ;     |-2 1 2|·|4| = | 8|
 ;     |-2 2 3| |5|   |17|
 ; Utilizați recursivitate pe coadă.
+(define (tail-multiply M V x)
+  (if (null? M)
+    x
+    (tail-multiply (cdr M) V (append x (list (dot-product (car M) V))))))
+
 (define (multiply M V)
-  'your-code-here)
+  (tail-multiply M V '()))
 
 
 ; TODO
