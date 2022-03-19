@@ -78,7 +78,7 @@
 ;     |-2 1 2|·|4| = | 8|
 ;     |-2 2 3| |5|   |17|
 (define (multiply M V)
-  'your-code-here)
+  (foldl (lambda (x y result) (+ result (* x y))) 0 (car M) V))
 
 
 ; TODO
