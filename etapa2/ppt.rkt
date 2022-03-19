@@ -3,7 +3,7 @@
 (provide (all-defined-out))
 
 ;; Același arbore de TPP obținut în etapa 1 prin aplicarea
-;; transformărilor T1, T2, T3 poate fi generat folosind 
+;; transformărilor T1, T2, T3 poate fi generat folosind
 ;; tupluri GH (Gopal-Hemachandra).
 ;;
 ;; Pentru o pereche oarecare (g, e), secvența GH este:
@@ -29,12 +29,12 @@
 ;;  - nodurile din arbore sunt cvartete, nu triplete
 ;;    (din cvartet obținem un TPP conform formulelor)
 ;;    (ex: (1,1,2,3) => (1*3,2*1*2,1^2+2^2) = (3,4,5))
-;;  - obținem următoarea generație de cvartete folosind 
+;;  - obținem următoarea generație de cvartete folosind
 ;;    trei transformări Q1, Q2, Q3 pentru cvartete, în loc
 ;;    de T1, T2, T3 care lucrau cu triplete
-;; 
+;;
 ;; Q1(g,e,f,h) = (h,e,h+e,h+2e)
-;; Q2(g,e,f,h) = (h,f,h+f,h+2f) 
+;; Q2(g,e,f,h) = (h,f,h+f,h+2f)
 ;; Q3(g,e,f,h) = (g,f,g+f,g+2f)
 ;;
 ;; Arborele rezultat arată astfel:
@@ -90,8 +90,52 @@
 ; funcției get-transformations de la etapa 1.
 ; Această funcție nu este re-punctată de checker, însă este
 ; necesară implementărilor ulterioare.
+(define (3-pow n)
+  (if (= n 0)
+    1
+    (* 3 (3-pow (- n 1)))))
+
+(define (tail-get-ns-level n x)
+  (if (<= n 0)
+    x
+    (tail-get-ns-level (- n (3-pow x)) (+ x 1))))
+
+(define (get-ns-level n)
+  (tail-get-ns-level n 0))
+
+(define (tail-minimum-index n x)
+  (if (= (get-ns-level n) (get-ns-level x))
+    (tail-minimum-index (- n 1) x)
+    (+ n 1)))
+
+(define (minimum-index n)
+  (tail-minimum-index n n))
+
+(define (tail-maximum-index n x)
+  (if (= (get-ns-level n) (get-ns-level x))
+    (tail-maximum-index (+ n 1) x)
+    (- n 1)))
+
+(define (maximum-index n)
+  (tail-maximum-index n n))
+
+(define (aux-get-transformations n min max)
+  (if (= min max)
+    '()
+    (cond
+      ((and (>= n min)
+      (<= n (+ min (- (/ (+ (- max min) 1) 3) 1))))
+        (append (list 1) (aux-get-transformations n min (+ min (- (/ (+ (- max min) 1) 3) 1)))))
+      ((and (>= n (+ min (/ (+ (- max min) 1) 3)))
+      (<= n (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1))))
+        (append (list 2) (aux-get-transformations n (+ min (/ (+ (- max min) 1) 3))
+        (+ min (- (* (/ (+ (- max min) 1) 3) 2) 1)))))
+      ((and (>= n (+ min (* (/ (+ (- max min) 1) 3) 2)))
+      (<= n max))
+        (append (list 3) (aux-get-transformations n (+ min (* (/ (+ (- max min) 1) 3) 2)) max))))))
+
 (define (get-transformations n)
-  'your-code-here)
+  (aux-get-transformations n (minimum-index n) (maximum-index n)))
 
 
 ; TODO
@@ -116,7 +160,7 @@
 
 ; TODO
 ; Tot în spiritul abstractizării, veți defini o nouă funcție
-; get-nth-tuple, care calculează al n-lea tuplu din arbore. 
+; get-nth-tuple, care calculează al n-lea tuplu din arbore.
 ; Această funcție va putea fi folosită:
 ;  - și pentru arborele de triplete (caz în care plecăm de la
 ;    (3,4,5) și avansăm via T1, T2, T3)
@@ -148,15 +192,15 @@
 
 
 ; TODO
-; Din get-nth-tuple, obțineți în cel mai succint mod posibil 
-; (hint: aplicare parțială) o funcție care calculează al n-lea 
+; Din get-nth-tuple, obțineți în cel mai succint mod posibil
+; (hint: aplicare parțială) o funcție care calculează al n-lea
 ; cvartet din arbore, folosind transformările pe cvartete.
 (define get-nth-quadruple
   'your-code-here)
 
 
 ; TODO
-; Folosiți rezultatul întors de get-nth-quadruple pentru a 
+; Folosiți rezultatul întors de get-nth-quadruple pentru a
 ; obține al n-lea TPP din arbore.
 (define get-nth-ppt-from-GH-quadruples
   'your-code-here)
