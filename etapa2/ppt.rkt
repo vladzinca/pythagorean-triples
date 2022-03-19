@@ -77,8 +77,12 @@
 ; Ex: |-1 2 2| |3|   |15|
 ;     |-2 1 2|·|4| = | 8|
 ;     |-2 2 3| |5|   |17|
+(define (curry-multiply V)
+  (λ (L)
+      (foldl (λ (x y result) (+ result (* x y))) 0 L V)))
+
 (define (multiply M V)
-  (foldl (lambda (x y result) (+ result (* x y))) 0 (car M) V))
+  (apply map (list (curry-multiply V) M)))
 
 
 ; TODO
