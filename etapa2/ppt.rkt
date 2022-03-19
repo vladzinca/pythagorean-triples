@@ -155,7 +155,7 @@
 ;    Fs să primească parametri de tipul lui tuple)
 ; Nu folosiți recursivitate explicită (ci funcționale).
 (define (apply-functional-transformations Fs tuple)
-  'your-code-here)
+  (foldl (λ (f tuple) (f tuple)) tuple Fs))
 
 
 ; TODO
