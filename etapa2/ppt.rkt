@@ -179,16 +179,29 @@
 ; modul optim în care funcția să își primească parametrii.
 ; Din acest motiv checker-ul nu testează separat această funcție,
 ; dar asistentul va observa dacă implementarea respectă cerința.
-(define get-nth-tuple
-  'your-code-here)
+(define (apply-function f)
+  (λ (tuple) (apply f tuple)))
+
+((apply-function Q1) '(1 1 2 3))
+
+(define (get-procedures-list n F1 F2 F3)
+    (map (λ (x) (cond ((= x 1) (apply-function F1)) ((= x 2) (apply-function F2)) ((= x 3) (apply-function F3)))) (get-transformations n)))
+
+(define (get-nth-tuple n F1 F2 F3)
+  (λ (tuple) (apply-functional-transformations (get-procedures-list n F1 F2 F3) tuple)))
+
+((get-nth-tuple 5 Q1 Q2 Q3) '(1 1 2 3))
 
 
 ; TODO
 ; Din get-nth-tuple, obțineți în cel mai succint mod posibil
 ; (hint: aplicare parțială) o funcție care calculează al n-lea
 ; TPP din arbore, folosind transformările pe triplete.
+(define (multiply-with-matrix M)
+  (λ (x y z) (multiply M (list x y z))))
+
 (define get-nth-ppt-from-matrix-transformations
-  'your-code-here)
+  (λ (n) ((get-nth-tuple n (multiply-with-matrix T1) (multiply-with-matrix T2) (multiply-with-matrix T3)) '(3 4 5))))
 
 
 ; TODO
@@ -196,11 +209,11 @@
 ; (hint: aplicare parțială) o funcție care calculează al n-lea
 ; cvartet din arbore, folosind transformările pe cvartete.
 (define get-nth-quadruple
-  'your-code-here)
+  (λ (n) ((get-nth-tuple n Q1 Q2 Q3) '(1 1 2 3))))
 
 
 ; TODO
 ; Folosiți rezultatul întors de get-nth-quadruple pentru a
 ; obține al n-lea TPP din arbore.
 (define get-nth-ppt-from-GH-quadruples
-  'your-code-here)
+  (λ (n) (get-nth-quadruple n)))
