@@ -70,8 +70,14 @@
 ; Utilizați o funcțională astfel încât să nu scrieți 9 bucăți
 ; de cod foarte similare (de exemplu, numele operației mod ar
 ; trebui să apară o singură dată).
+(define generalize-from-a1-to-c3
+  (λ (e f)
+    (λ (func) (modulo (func e f) 27))))
+
 (define (key n)
-  'your-code-here)
+  (let ((e (cadr (get-nth-quadruple n)))
+        (f (caddr (get-nth-quadruple n))))
+        (map (generalize-from-a1-to-c3 e f) (list a1 b1 c1 a2 b2 c2 a3 b3 c3))))
 
 
 ; TODO
