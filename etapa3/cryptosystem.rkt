@@ -70,14 +70,12 @@
 ; Utilizați o funcțională astfel încât să nu scrieți 9 bucăți
 ; de cod foarte similare (de exemplu, numele operației mod ar
 ; trebui să apară o singură dată).
-(define generalize-from-a1-to-c3
-  (λ (e f)
-    (λ (func) (modulo (func e f) 27))))
-
 (define (key n)
-  (let ((e (cadr (get-nth-quadruple n)))
-        (f (caddr (get-nth-quadruple n))))
-        (map (generalize-from-a1-to-c3 e f) (list a1 b1 c1 a2 b2 c2 a3 b3 c3))))
+  (let*
+    ((e (cadr (get-nth-quadruple n)))
+    (f (caddr (get-nth-quadruple n)))
+    (generalize-from-a1-to-c3 (λ (func) (modulo (func e f) 27))))
+    (map generalize-from-a1-to-c3 (list a1 b1 c1 a2 b2 c2 a3 b3 c3))))
 
 
 ; TODO
@@ -86,14 +84,10 @@
 ; întoarce o listă de coduri asociate mesajului respectiv
 ; (spațiu devine 0, 'a' devine 1 ... 'z' devine 26).
 ; Funcții utile: string->list, char->integer
-(define adjust-integer-value
-  (λ (int)
-    (if (= int 32)
-      0
-      (- int 96))))
-
 (define (message->codes message)
-  (map adjust-integer-value (map char->integer (string->list message))))
+  (let
+    ((adjust-integer-value (λ (int) (if (= int 32) 0 (- int 96)))))
+    (map adjust-integer-value (map char->integer (string->list message)))))
 
 
 ; TODO
@@ -101,14 +95,10 @@
 ; (numere între 0 și 26) și întoarce mesajul asociat
 ; (procesul invers celui de la funcția message->codes).
 ; Funcții utile: list->string, integer->char
-(define adjust-integer-backwards
-  (λ (int)
-    (if (= int 0)
-      32
-      (+ int 96))))
-
 (define (codes->message codes)
-  (list->string (map integer->char (map adjust-integer-backwards codes))))
+  (let
+    ((adjust-integer-backwards (λ (int) (if (= int 0) 32 (+ int 96)))))
+    (list->string (map integer->char (map adjust-integer-backwards codes)))))
 
 
 ;; Pentru operațiile de criptare și decriptare, lucrăm
@@ -135,7 +125,23 @@
 ; dimensiunea size.
 ; Folosiți cel puțin o formă de let.
 (define (extend-key key size)
-  'your-code-here)
+  (letrec
+    ((l (length key))
+    (truncate (λ (key size)
+                (if (= (length key) size)
+                  key
+                  (truncate (reverse (cdr (reverse key))) size))))
+    (expand (λ (key size)
+              (if (= (length key) size)
+                key
+                (if (> (length key) size)
+                  (truncate key size)
+                  (expand (append key key) size))))))
+    (if (= l size)
+      key
+      (if (> l size)
+        (truncate key size)
+        (expand key size)))))
 
 
 ; TODO
