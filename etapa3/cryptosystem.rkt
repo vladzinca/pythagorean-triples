@@ -176,7 +176,13 @@
 ; În acest caz, ambele funcții primesc un șir de caractere
 ; (mesajul clar/criptat) și o listă de coduri (cheia) și
 ; întorc un șir de caractere (mesajul criptat/decriptat).
+(define message-cypher
+  (λ (func)
+    (λ (message key)
+      (codes->message (func (message->codes message) key)))))
+
 (define encrypt-message
-  'your-code-here)
+  (message-cypher encrypt-codes))
+
 (define decrypt-message
-  'your-code-here)
+  (message-cypher decrypt-codes))
