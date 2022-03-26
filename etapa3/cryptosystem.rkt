@@ -126,8 +126,7 @@
 ; Folosiți cel puțin o formă de let.
 (define (extend-key key size)
   (letrec
-    ((l (length key))
-    (truncate (λ (key size)
+    ((truncate (λ (key size)
                 (if (= (length key) size)
                   key
                   (truncate (reverse (cdr (reverse key))) size))))
@@ -137,9 +136,9 @@
                 (if (> (length key) size)
                   (truncate key size)
                   (expand (append key key) size))))))
-    (if (= l size)
+    (if (= (length key) size)
       key
-      (if (> l size)
+      (if (> (length key) size)
         (truncate key size)
         (expand key size)))))
 
@@ -157,10 +156,17 @@
 ; Ambele funcții primesc două liste de coduri (reprezentând
 ; mesajul clar/criptat, respectiv cheia) și întorc o listă
 ; de coduri (mesajul criptat/decriptat, după caz).
+(define cypher
+  (λ (func)
+    (λ (message key)
+      (foldl (λ (m k result) (append result (list (modulo (func m k) 27))))
+        '() message (extend-key key (length message))))))
+
 (define encrypt-codes
-  'your-code-here)
+  (cypher +))
+
 (define decrypt-codes
-  'your-code-here)
+  (cypher -))
 
 
 ; TODO
