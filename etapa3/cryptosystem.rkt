@@ -86,8 +86,14 @@
 ; întoarce o listă de coduri asociate mesajului respectiv
 ; (spațiu devine 0, 'a' devine 1 ... 'z' devine 26).
 ; Funcții utile: string->list, char->integer
+(define adjust-integer-value
+  (λ (int)
+    (if (= int 32)
+      0
+      (- int 96))))
+
 (define (message->codes message)
-  'your-code-here)
+  (map adjust-integer-value (map char->integer (string->list message))))
 
 
 ; TODO
@@ -95,8 +101,14 @@
 ; (numere între 0 și 26) și întoarce mesajul asociat
 ; (procesul invers celui de la funcția message->codes).
 ; Funcții utile: list->string, integer->char
+(define adjust-integer-backwards
+  (λ (int)
+    (if (= int 0)
+      32
+      (+ int 96))))
+
 (define (codes->message codes)
-  'your-code-here)
+  (list->string (map integer->char (map adjust-integer-backwards codes))))
 
 
 ;; Pentru operațiile de criptare și decriptare, lucrăm
