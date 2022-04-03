@@ -57,28 +57,11 @@
 ; (parcurgerea BFS a arborelui infinit).
 ; Funcție utilă: stream-append
 ; Folosiți cel puțin o formă de let.
-(define (take-tail-Q F Q i)
-  (if (> i 10)
-      F
-      (take-tail-Q (append F (list (car Q))) (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))) (add1 i))))
-
-(define take-Q
-  (take-tail-Q '() '((3 4 5)) 0))
-
-take-Q
-
-(define (stream-take s n)
-  (cond ((zero? n) '())
-        ((stream-empty? s) '())
-        (else (cons (stream-first s)
-                    (stream-take (stream-rest s) (- n 1))))))
-
 (define ppt-stream-in-tree-order
-  (letrec (
-          (F (λ (Q) (stream-cons (car Q) (F (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))))))))
+  (letrec
+    ((F (λ (Q) (stream-cons (car Q) (F (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))))))))
     (F '((3 4 5)))))
 
-(stream-take ppt-stream-in-tree-order 10)
 
 ;; Un alt mod de a genera TPP se folosește de perechi (g, h)
 ;; care indeplinesc condițiile:
@@ -153,7 +136,15 @@ take-Q
 ;    există în rezultatul funcției pairs, dar nu vor mai exista
 ;    în fluxul gh-pairs-stream)
 (define (pairs G H)
-  'your-code-here)
+  (letrec
+    ((aux-pairs
+      (λ (G original-G H) ; întoarce fluxul start, start+1, start+2...
+        (if (or (stream-empty? G) (stream-empty? H))
+          empty-stream
+          (if (< (stream-first G) (stream-first H))
+            (stream-cons (cons (stream-first G) (stream-first H)) (aux-pairs (stream-rest G) original-G H))
+            (aux-pairs original-G original-G (stream-rest H)))))))
+    (aux-pairs G G H)))
 
 
 ; TODO
