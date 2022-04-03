@@ -138,7 +138,7 @@
 (define (pairs G H)
   (letrec
     ((aux-pairs
-      (λ (G original-G H) ; întoarce fluxul start, start+1, start+2...
+      (λ (G original-G H)
         (if (or (stream-empty? G) (stream-empty? H))
           empty-stream
           (if (< (stream-first G) (stream-first H))
@@ -153,7 +153,11 @@
 ; Nu folosiți recursivitate explicită (decât pentru a genera
 ; fluxurile de pornire - G și H).
 (define gh-pairs-stream
-  'your-code-here)
+  (letrec
+    ((two-step-naturals (λ (start) (stream-cons start (two-step-naturals (+ start 2)))))
+    (G (two-step-naturals 1))
+    (H (two-step-naturals 3)))
+    (stream-filter (λ (pair) (equal? (gcd (car pair) (cdr pair)) 1)) (pairs G H))))
 
 
 ; TODO
