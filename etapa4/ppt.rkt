@@ -18,7 +18,7 @@
 ;; întrucât succesorii unui TPP sunt automat triplete noi,
 ;; deci nu este necesar să verificăm dacă un nod a mai
 ;; fost sau nu vizitat.
-;; 
+;;
 ;; Schema acestui BFS simplificat este:
 ;;  1. inițializăm coada de noduri care trebuie vizitate cu
 ;;     rădăcina arborelui (tripletul (3,4,5))
@@ -39,13 +39,17 @@
 ; TODO
 ; Aduceți aici (nu sunt necesare modificări) implementările
 ; funcțiilor dot-product și multiply din etapa 1 sau 2.
-; Cele două funcții nu sunt re-punctate de checker, însă 
+; Cele două funcții nu sunt re-punctate de checker, însă
 ; sunt necesare generării succesorilor unui nod.
 (define (dot-product X Y)
-  'your-code-here)
+  (apply + (map * X Y)))
+
+(define (curry-multiply V)
+  (λ (L)
+      (foldl (λ (x y result) (+ result (* x y))) 0 L V)))
 
 (define (multiply M V)
-  'your-code-here)
+  (apply map (list (curry-multiply V) M)))
 
 
 ; TODO
@@ -53,9 +57,28 @@
 ; (parcurgerea BFS a arborelui infinit).
 ; Funcție utilă: stream-append
 ; Folosiți cel puțin o formă de let.
-(define ppt-stream-in-tree-order
-  'your-code-here)
+(define (take-tail-Q F Q i)
+  (if (> i 10)
+      F
+      (take-tail-Q (append F (list (car Q))) (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))) (add1 i))))
 
+(define take-Q
+  (take-tail-Q '() '((3 4 5)) 0))
+
+take-Q
+
+(define (stream-take s n)
+  (cond ((zero? n) '())
+        ((stream-empty? s) '())
+        (else (cons (stream-first s)
+                    (stream-take (stream-rest s) (- n 1))))))
+
+(define ppt-stream-in-tree-order
+  (letrec (
+          (F (λ (Q) (stream-cons (car Q) (F (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))))))))
+    (F '((3 4 5)))))
+
+(stream-take ppt-stream-in-tree-order 10)
 
 ;; Un alt mod de a genera TPP se folosește de perechi (g, h)
 ;; care indeplinesc condițiile:
@@ -79,7 +102,7 @@
 ;; decât cea dată de parcurgerea în lățime a arborelui TPP.
 ;;
 ;; Noua ordine se obține parcurgând pe coloane diagrama:
-;;                        h      
+;;                        h
 ;;         3     5     7     9     11   .  .  .
 ;;    1  (1,3) (1,5) (1,7) (1,9) (1,11) .  .  .
 ;;    3        (3,5) (3,7)   -   (3,11) .  .  .
@@ -97,7 +120,7 @@
 ;;    (7,24,25), (21,20,29), (35,12,37) - din (1,7), (3,7), (5,7)
 ;;
 ;; Ne propunem să definim fluxul infinit de TPP în ordinea de
-;; mai sus. Acesta se bazează pe fluxul corespunzător de 
+;; mai sus. Acesta se bazează pe fluxul corespunzător de
 ;; perechi (g, h), pe care îl generăm astfel:
 ;;  - pornim cu 2 fluxuri infinite:
 ;;    * G = 1, 3, 5, 7 ...
@@ -111,14 +134,14 @@
 ;;      - fluxul ordonat generat de restul lui G și restul lui H
 ;;        (ex: (3,5), (3,7), (5,7) ...)
 ;; Aceasta este abordarea generală, în urma căreia generăm toate
-;; perechile, inclusiv pe cele de numere care nu sunt prime  
+;; perechile, inclusiv pe cele de numere care nu sunt prime
 ;; între ele. Perechile neconforme trebuie înlăturate ulterior
 ;; (utilizând funcția de bibliotecă gcd).
 
 
 ; TODO
 ; Definiți o funcție care primește 2 fluxuri numerice infinite
-; G și H, și generează fluxul de perechi de câte un element 
+; G și H, și generează fluxul de perechi de câte un element
 ; din G și unul din H ordonate conform metodei de mai sus.
 ; Condițiile ca g și h să fie impare, prime între ele, respectiv
 ; menținerea restricției g < h (cât timp urmați algoritmul) nu
@@ -126,7 +149,7 @@
 ; Ele vor fi asigurate de definirea fluxurilor de mai jos prin:
 ;  - apelarea lui pairs exclusiv pe fluxurile
 ;    G = 1, 3, 5, 7 ... și H = 3, 5, 7, 9 ...
-;  - eliminarea perechilor de numere neprime între ele (care 
+;  - eliminarea perechilor de numere neprime între ele (care
 ;    există în rezultatul funcției pairs, dar nu vor mai exista
 ;    în fluxul gh-pairs-stream)
 (define (pairs G H)
@@ -147,5 +170,3 @@
 ; perechi (g, h).
 (define ppt-stream-in-pair-order
   'your-code-here)
-
-
