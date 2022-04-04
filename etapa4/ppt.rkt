@@ -164,4 +164,10 @@
 ; Definiți fluxul de TPP corespunzător fluxului anterior de
 ; perechi (g, h).
 (define ppt-stream-in-pair-order
-  'your-code-here)
+  (letrec
+    ((ppt-stream (λ (gh-pairs) (stream-cons (list
+                    (* (car (stream-first gh-pairs)) (cdr (stream-first gh-pairs)))
+                    (/ (- (sqr (cdr (stream-first gh-pairs))) (sqr (car (stream-first gh-pairs)))) 2)
+                    (/ (+ (sqr (cdr (stream-first gh-pairs))) (sqr (car (stream-first gh-pairs)))) 2))
+                    (ppt-stream (stream-rest gh-pairs))))))
+    (ppt-stream gh-pairs-stream)))
