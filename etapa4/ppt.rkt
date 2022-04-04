@@ -59,7 +59,8 @@
 ; Folosiți cel puțin o formă de let.
 (define ppt-stream-in-tree-order
   (letrec
-    ((F (λ (Q) (stream-cons (car Q) (F (cdr (append Q (list (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))))))))
+    ((F (λ (Q) (stream-cons (car Q) (F (cdr (append Q (list
+          (multiply T1 (car Q)) (multiply T2 (car Q)) (multiply T3 (car Q))))))))))
     (F '((3 4 5)))))
 
 
@@ -138,13 +139,14 @@
 (define (pairs G H)
   (letrec
     ((aux-pairs
-      (λ (G original-G H)
+      (λ (G original-G H g h)
         (if (or (stream-empty? G) (stream-empty? H))
           empty-stream
-          (if (< (stream-first G) (stream-first H))
-            (stream-cons (cons (stream-first G) (stream-first H)) (aux-pairs (stream-rest G) original-G H))
-            (aux-pairs original-G original-G (stream-rest H)))))))
-    (aux-pairs G G H)))
+          (if (< g h)
+            (stream-cons (cons (stream-first G) (stream-first H))
+              (aux-pairs (stream-rest G) original-G H (add1 g) h))
+            (aux-pairs original-G original-G (stream-rest H) 0 (add1 h)))))))
+    (aux-pairs G G H 0 1)))
 
 
 ; TODO
